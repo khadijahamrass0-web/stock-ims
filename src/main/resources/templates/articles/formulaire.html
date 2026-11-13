@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Nouvel article')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: entete('nouveau')}"></div>
+
+<main class="conteneur conteneur--etroit">
+    <nav class="fil" aria-label="Fil d’Ariane">
+        <a th:href="@{/articles}">Articles</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Nouvel article</span>
+    </nav>
+
+    <section class="entete-page entete-page--compact">
+        <div>
+            <p class="eyebrow">Catalogue</p>
+            <h1>Nouvel article</h1>
+            <p class="sous-titre">Une référence unique et une désignation suffisent pour démarrer.</p>
+        </div>
+    </section>
+
+    <section class="carte carte--formulaire">
+        <form th:action="@{/articles}" th:object="${article}" method="post">
+            <div class="alerte alerte--erreur" role="alert" th:if="${#fields.hasGlobalErrors()}">
+                <span class="alerte__icone" aria-hidden="true">!</span>
+                <div>
+                    <p th:each="erreur : ${#fields.globalErrors()}" th:text="${erreur}">Erreur</p>
+                </div>
+            </div>
+
+            <div class="champ" th:classappend="${#fields.hasErrors('reference')} ? ' champ--erreur' : ''">
+                <label for="reference">Référence <span class="obligatoire" aria-hidden="true">*</span></label>
+                <input id="reference" type="text" th:field="*{reference}" maxlength="20"
+                       autocomplete="off" placeholder="Ex. TIS-001" required
+                       aria-describedby="aide-reference erreur-reference" th:autofocus="true">
+                <p class="champ__aide" id="aide-reference">20 caractères maximum. La référence doit être unique.</p>
+                <p class="champ__erreur" id="erreur-reference"
+                   th:if="${#fields.hasErrors('reference')}" th:errors="*{reference}">Erreur</p>
+            </div>
+
+            <div class="champ" th:classappend="${#fields.hasErrors('designation')} ? ' champ--erreur' : ''">
+                <label for="designation">Désignation <span class="obligatoire" aria-hidden="true">*</span></label>
+                <input id="designation" type="text" th:field="*{designation}" maxlength="80"
+                       autocomplete="off" placeholder="Ex. Rouleau de coton" required
+                       aria-describedby="aide-designation erreur-designation">
+                <p class="champ__aide" id="aide-designation">80 caractères maximum.</p>
+                <p class="champ__erreur" id="erreur-designation"
+                   th:if="${#fields.hasErrors('designation')}" th:errors="*{designation}">Erreur</p>
+            </div>
+
+            <div class="formulaire__actions">
+                <button type="submit" class="bouton bouton--primaire">Enregistrer l'article</button>
+                <a class="bouton bouton--discret" th:href="@{/articles}">Annuler</a>
+            </div>
+        </form>
+
+        <p class="note">
+            <strong>Bon à savoir :</strong> un article sans mouvement possède un stock de 0.
+            Les quantités sont toujours des entiers strictement positifs.
+        </p>
+    </section>
+</main>
+
+<div th:replace="~{fragments/layout :: pied}"></div>
+<div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+</html>

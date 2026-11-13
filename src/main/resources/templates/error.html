@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Page introuvable')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: entete('')}"></div>
+
+<main class="conteneur conteneur--etroit">
+    <section class="carte etat-vide">
+        <p class="eyebrow">Erreur <span th:text="${status}">404</span></p>
+        <h1 th:text="${status == 404} ? 'Page introuvable' : 'Une erreur est survenue'">
+            Page introuvable
+        </h1>
+        <p th:text="${status == 404}
+            ? 'L’adresse demandée n’existe pas ou l’article a été supprimé.'
+            : 'Réessayez dans un instant. Si le problème persiste, vérifiez la connexion à MySQL.'">
+            L’adresse demandée n’existe pas.
+        </p>
+        <a class="bouton bouton--primaire" th:href="@{/articles}">Retour aux articles</a>
+    </section>
+</main>
+
+<div th:replace="~{fragments/layout :: pied}"></div>
+<div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+</html>

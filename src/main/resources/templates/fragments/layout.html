@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(titre)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="StockIMS — gestion simple des articles et des mouvements de stock.">
+    <title th:text="|${titre} · StockIMS|">StockIMS</title>
+    <link rel="icon" type="image/svg+xml" th:href="@{/favicon.svg}">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+
+<header th:fragment="entete(active)" class="entete">
+    <div class="conteneur entete__contenu">
+        <a class="marque" th:href="@{/articles}" aria-label="StockIMS, retour à la liste des articles">
+            <span class="marque__logo" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 8.5 12 3 3 8.5v7L12 21l9-5.5v-7Z"/>
+                    <path d="M3.5 8.7 12 13.5l8.5-4.8"/>
+                    <path d="M12 13.5V21"/>
+                </svg>
+            </span>
+            <span class="marque__texte">
+                <strong>StockIMS</strong>
+                <small>Gestion de stock</small>
+            </span>
+        </a>
+
+        <nav class="nav" aria-label="Navigation principale">
+            <a class="nav__lien" th:href="@{/articles}"
+               th:classappend="${active == 'articles'} ? ' nav__lien--actif' : ''">Articles</a>
+            <a class="nav__lien" th:href="@{/articles/nouveau}"
+               th:classappend="${active == 'nouveau'} ? ' nav__lien--actif' : ''">Nouvel article</a>
+        </nav>
+    </div>
+</header>
+
+<div th:fragment="alertes">
+    <div class="alerte alerte--succes" role="status" th:if="${succes}" data-auto-dismiss>
+        <span class="alerte__icone" aria-hidden="true">✓</span>
+        <p th:text="${succes}">Opération enregistrée.</p>
+        <button class="alerte__fermer" type="button" aria-label="Fermer le message" data-fermer-alerte>×</button>
+    </div>
+</div>
+
+<footer th:fragment="pied" class="pied">
+    <div class="conteneur pied__contenu">
+        <p>StockIMS · Projet Java 21 — Spring Boot, MySQL, Thymeleaf.</p>
+        <p>Saber Salma · Hamras Khadija</p>
+    </div>
+</footer>
+
+<script th:fragment="scripts" th:src="@{/js/app.js}"></script>
+</body>
+</html>

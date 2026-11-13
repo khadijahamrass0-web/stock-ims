@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Les articles')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: entete('articles')}"></div>
+
+<main class="conteneur">
+    <div th:replace="~{fragments/layout :: alertes}"></div>
+
+    <section class="entete-page">
+        <div>
+            <p class="eyebrow">Catalogue</p>
+            <h1>Les articles</h1>
+            <p class="sous-titre">
+                Suivez les entrées et les sorties : le stock disponible est recalculé
+                à partir des mouvements enregistrés.
+            </p>
+        </div>
+        <a class="bouton bouton--primaire" th:href="@{/articles/nouveau}">
+            <span aria-hidden="true">+</span> Nouvel article
+        </a>
+    </section>
+
+    <section class="statistiques" aria-label="Résumé du stock">
+        <article class="stat">
+            <span class="stat__libelle">Articles</span>
+            <strong class="stat__valeur" th:text="${nbArticles}">0</strong>
+        </article>
+        <article class="stat">
+            <span class="stat__libelle">Stock total</span>
+            <strong class="stat__valeur">
+                <span th:text="${stockTotal}">0</span><small> u.</small>
+            </strong>
+        </article>
+        <article class="stat" th:classappend="${nbRuptures > 0} ? ' stat--alerte' : ''">
+            <span class="stat__libelle">Articles en rupture</span>
+            <strong class="stat__valeur" th:text="${nbRuptures}">0</strong>
+        </article>
+    </section>
+
+    <section class="carte carte--liste">
+        <div class="barre-outils" th:unless="${#lists.isEmpty(lignes)}">
+            <label class="recherche" for="filtre">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                     stroke-linecap="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="7"/>
+                    <path d="m20 20-3.5-3.5"/>
+                </svg>
+                <span class="sr-only">Rechercher un article</span>
+                <input id="filtre" type="search" placeholder="Rechercher une référence ou une désignation…"
+                       autocomplete="off" aria-controls="tableau-articles" data-filtre-articles>
+            </label>
+            <div class="barre-outils__meta">
+                <span id="compteur-resultats" aria-live="polite"
+                      th:text="|${nbArticles} article(s)|">0 article(s)</span>
+                <button type="button" class="lien-discret" id="effacer-filtre" hidden>Effacer</button>
+            </div>
+        </div>
+
+        <div class="tableau-wrapper" id="tableau-articles" th:unless="${#lists.isEmpty(lignes)}">
+            <table class="tableau">
+                <caption class="sr-only">Liste des articles et de leur stock disponible</caption>
+                <thead>
+                <tr>
+                    <th scope="col">Référence</th>
+                    <th scope="col">Désignation</th>
+                    <th scope="col" class="tableau__nombre">Stock</th>
+                    <th scope="col"><span class="sr-only">Actions</span></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="ligne : ${lignes}"
+                    th:attr="data-recherche=${ligne.article.reference + ' ' + ligne.article.designation}">
+                    <td><span class="reference" th:text="${ligne.article.reference}">TIS-001</span></td>
+                    <td><span class="designation" th:text="${ligne.article.designation}">Rouleau de coton</span></td>
+                    <td class="tableau__nombre">
+                        <span class="pastille"
+                              th:classappend="${ligne.stock == 0} ? ' pastille--rupture' : ' pastille--disponible'">
+                            <span class="pastille__point" aria-hidden="true"></span>
+                            <span th:text="${ligne.stock}">0</span>
+                            <span class="pastille__unite"
+                                  th:text="${ligne.stock == 0} ? 'rupture' : 'u.'">u.</span>
+                        </span>
+                    </td>
+                    <td class="tableau__action">
+                        <a class="bouton bouton--discret" th:href="@{/stock/{id}(id=${ligne.article.id})}">
+                            Voir la fiche <span aria-hidden="true">→</span>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <p class="tableau__vide-filtre" id="aucun-resultat" hidden>
+                Aucun article ne correspond à cette recherche.
+            </p>
+        </div>
+
+        <div class="etat-vide" th:if="${#lists.isEmpty(lignes)}">
+            <span class="etat-vide__icone" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 8.5 12 3 3 8.5v7L12 21l9-5.5v-7Z"/>
+                    <path d="M3.5 8.7 12 13.5l8.5-4.8"/>
+                    <path d="M12 13.5V21"/>
+                </svg>
+            </span>
+            <h2>Aucun article pour le moment</h2>
+            <p>Créez votre premier article pour commencer à suivre les entrées et les sorties.</p>
+            <a class="bouton bouton--primaire" th:href="@{/articles/nouveau}">Créer un article</a>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{fragments/layout :: pied}"></div>
+<div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+</html>
