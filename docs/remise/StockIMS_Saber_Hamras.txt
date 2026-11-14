@@ -1,0 +1,6 @@
+Projet : StockIMS - Gestion de stock avec Spring Boot
+
+Étudiant 1 : Saber Salma
+Étudiant 2 : Hamras Khadija
+
+Lien du dépôt GitHub : https://github.com/khadijahamrass0-web/stock-ims
